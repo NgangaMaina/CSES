@@ -20,13 +20,13 @@ public class IncreasingArr {
             arr[i] = scanner.nextInt();
         }
 
-        int moves = 0;
+        long moves = 0;
 
         // Start from the second element and compare with the previous one
         for (int i = 1; i < n; i++) {
             if (arr[i] < arr[i - 1]) {
                 // Calculate how many moves are required to make arr[i] >= arr[i-1]
-                moves += arr[i - 1] - arr[i];
+                moves += (long) arr[i - 1] - arr[i];
                 arr[i] = arr[i - 1]; // Set arr[i] to arr[i - 1]
             }
         }
