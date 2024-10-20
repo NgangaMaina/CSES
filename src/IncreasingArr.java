@@ -7,27 +7,32 @@
 
 import java.util.Scanner;
 
+import java.util.Scanner;
+
 public class IncreasingArr {
     public static void main(String[] args) {
-         Scanner scanner = new Scanner(System.in);
-         int n = scanner.nextInt();
+        Scanner scanner = new Scanner(System.in);
+        int n = scanner.nextInt();
 
-         int[] arr = new int[n];
+        int[] arr = new int[n];
 
-         for(int i = 0; i < n; i++) {
-             arr[i] = scanner.nextInt();
-         }
+        for (int i = 0; i < n; i++) {
+            arr[i] = scanner.nextInt();
+        }
 
-         int moves = 0;
+        int moves = 0;
 
-         for(int i = 0; i < n; i++) {
-             if (arr[i] < arr[n - 1]){
-                 moves += arr[i - 1] - arr[i];
-                 arr[i] = arr[i - 1];
-             }
-         }
+        // Start from the second element and compare with the previous one
+        for (int i = 1; i < n; i++) {
+            if (arr[i] < arr[i - 1]) {
+                // Calculate how many moves are required to make arr[i] >= arr[i-1]
+                moves += arr[i - 1] - arr[i];
+                arr[i] = arr[i - 1]; // Set arr[i] to arr[i - 1]
+            }
+        }
 
-         System.out.println(moves);
-         scanner.close();
+        System.out.println(moves);
+        scanner.close();
     }
 }
+
