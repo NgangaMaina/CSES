@@ -8,6 +8,7 @@
 
 import java.util.ArrayList;
 import java.util.Scanner;
+
 public class EqualSumSets {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
@@ -17,7 +18,7 @@ public class EqualSumSets {
 
         if (sum % 2 != 0) {
             System.out.println("NO");
-        }else{
+        } else {
             System.out.println("YES");
 
             ArrayList<Integer> set1 = new ArrayList<>();
@@ -26,25 +27,32 @@ public class EqualSumSets {
             long targetSum = sum / 2;
             long currentSum = 0;
 
+
             for (int i = n; i >= 1; i--) {
-                if(currentSum + i <= targetSum){
+                if (currentSum + i <= targetSum) {
                     set1.add(i);
                     currentSum += i;
-                }else{
+                } else {
                     set2.add(i);
                 }
             }
-            System.out.println(set1.size());
-            for(int num : set1){
-                System.out.println(num + " ");
-            }
-            System.out.println();
 
-            System.out.println(set2.size());
-            for(int num : set2){
-                System.out.println(num + " ");
+
+            StringBuilder sb = new StringBuilder();
+            sb.append(set1.size()).append("\n");
+            for (int num : set1) {
+                sb.append(num).append(" ");
             }
-            System.out.println();
+            sb.append("\n");
+
+            sb.append(set2.size()).append("\n");
+            for (int num : set2) {
+                sb.append(num).append(" ");
+            }
+            sb.append("\n");
+
+            // Output all at once
+            System.out.print(sb.toString());
         }
         sc.close();
     }
