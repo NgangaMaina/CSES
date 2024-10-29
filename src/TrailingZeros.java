@@ -5,11 +5,11 @@
 * */
 
 import java.util.Scanner;
+
 public class TrailingZeros {
-    // Move method outside main
-    public static int countTrailingZeros(int n) {
-        int count = 0;
-        for (int i = 5; n / i >= 1; i *= 5) {
+    public static long countTrailingZeros(long n) {
+        long count = 0;
+        for (long i = 5; n / i >= 1; i *= 5) {
             count += n / i;
         }
         return count;
@@ -17,8 +17,8 @@ public class TrailingZeros {
 
     public static void main(String[] args) {
         try (Scanner sc = new Scanner(System.in)) {
-            int n = sc.nextInt();
-            System.out.println("Number of trailing zeros in " + n + "! is: " + countTrailingZeros(n));
+            long n = sc.nextLong();
+            System.out.println(countTrailingZeros(n));
         }
     }
 }
