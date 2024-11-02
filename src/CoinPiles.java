@@ -15,7 +15,7 @@ public class CoinPiles {
             long a = sc.nextLong();
             long b = sc.nextLong();
 
-            if((a + b)% 3 == 0 && a <= 2 * b && b <= 2 * b ){
+            if((a + b)% 3 == 0 && a <= 2 * b && b <= 2 * a ){
                 result.append("YES\n");
             }else{
                 result.append("NO\n");
