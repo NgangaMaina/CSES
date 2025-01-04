@@ -1,3 +1,12 @@
+/*
+* The infinite string is composed of concatenated positive integers in increasing order:
+123456789101112131415...
+* The problem requires finding the digit at a specific 1-indexed position k in this string
+* Directly constructing such a string to solve the problem is infeasible because k can go up to 10^18.
+Instead, the solution involves:
+    -Understanding the structure of the infinite string.
+    -Breaking the problem into steps.
+* */
 
 import java.util.Scanner;
 public class InfiniteStringQuery {
