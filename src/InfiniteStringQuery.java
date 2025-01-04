@@ -6,6 +6,7 @@ public class InfiniteStringQuery {
         int q = sc.nextInt(); //Number of queries
         StringBuilder result = new StringBuilder();
 
+        //Iterate through each query
         while(q-- >0){
             long k = sc.nextLong(); //Position to query
             result.append(findDigitAtPosition(k)).append("\n");
