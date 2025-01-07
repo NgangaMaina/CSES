@@ -12,7 +12,7 @@ public class NumberSpiral {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int t = Integer.parseInt(br.readLine());
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sbr = new StringBuilder();
 
         while (t-- > 0) {
             String[] input = br.readLine().split(" ");
@@ -34,9 +34,9 @@ public class NumberSpiral {
                 }
             }
 
-            sb.append(result).append("\n");
+            sbr.append(result).append("\n");
         }
 
-        System.out.print(sb.toString());
+        System.out.print(sbr.toString());
     }
 }
