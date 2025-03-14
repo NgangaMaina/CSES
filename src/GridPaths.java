@@ -4,64 +4,96 @@ can represent any of the four directions (D, U, L, R).We must traverse the grid 
 lower-left corner (7×7 grid) following the constraints given in the path description.
 * */
 
-import java.util.*;
+import java.util.Scanner;
 
 public class GridPaths {
-    static final int GRID_SIZE = 7; //7x7 grid
-    static boolean[][] visited = new boolean[GRID_SIZE][GRID_SIZE];
-    static String path; //Input path string
-    static int count = 0; //Total valid paths
+    private static final int GRID_SIZE = 7;
+    private static final int PATH_LENGTH = 48;
+    private static final int TARGET_ROW = GRID_SIZE - 1;
+    private static final int TARGET_COL = 0;
 
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        path = sc.next(); //Input string of 48 characters
-        visited[0][0] = true; //Start at the top-left corner
-        dfs(0, 0, 0); //Begin depth-first search
-        System.out.println(count); //Output the total count of valid paths
+        Scanner scanner = new Scanner(System.in);
+        String description = scanner.nextLine();
+        scanner.close();
+
+        System.out.println(countPaths(description));
     }
 
-    // dfs function
-    static void dfs(int x, int y, int step) {
-        // Base case: Reached bottom-left corner with exactly 48 steps
-        if (x == GRID_SIZE - 1 && y == 0) {
-            if (step == 48) count++;
-            return;
-        }
+    private static long countPaths(String description) {
+        // Create memoization array
+        Long[][][] memo = new Long[PATH_LENGTH + 1][GRID_SIZE][GRID_SIZE];
 
-        //Terminate early if steps exceed limit
-        if (step >= 48) return;
-
-        //Directions: D, U, L, R
-        int[] dx = {1, -1, 0, 0};
-        int[] dy = {0, 0, -1, 1};
-        char[] directions = {'D', 'U', 'L', 'R'};
-
-        char currentMove = path.charAt(step);
-
-        //Iterate over all possible moves
-        for (int i = 0; i < 4; i++) {
-            int nx = x + dx[i];
-            int ny = y + dy[i];
-
-            //If the current move is not '?' and does not match the direction, skip
-            if (currentMove != '?' && currentMove != directions[i]) continue;
-
-            //Skip invalid moves (out of bounds or revisiting a cell)
-            if (!isValid(nx, ny)) continue;
-
-            //Mark the cell as visited and proceed with recursion
-            visited[nx][ny] = true;
-            dfs(nx, ny, step + 1);
-            visited[nx][ny] = false; //Backtrack
-        }
+        // Start the recursion from the upper-left corner (0,0)
+        return solve(description, 0, 0, 0, memo);
     }
 
-    //Check if a position is valid
-    static boolean isValid(int x, int y) {
-        return x >= 0 && x < GRID_SIZE && y >= 0 && y < GRID_SIZE && !visited[x][y];
+    private static long solve(String description, int pos, int row, int col, Long[][][] memo) {
+        // Check if we're out of bounds
+        if (row < 0 || row >= GRID_SIZE || col < 0 || col >= GRID_SIZE) {
+            return 0;
+        }
+
+        // If we've reached the target before using all moves, this is not a valid path
+        if (row == TARGET_ROW && col == TARGET_COL && pos < PATH_LENGTH) {
+            return 0;
+        }
+
+        // Base case: reached the end of the path
+        if (pos == PATH_LENGTH) {
+            // Check if we're at the target (bottom-left corner)
+            return (row == TARGET_ROW && col == TARGET_COL) ? 1 : 0;
+        }
+
+        // If we've already computed this state, return the cached result
+        if (memo[pos][row][col] != null) {
+            return memo[pos][row][col];
+        }
+
+        // Optimization: Check if we can reach the target in the remaining moves
+        int remainingMoves = PATH_LENGTH - pos;
+        int minMovesToTarget = Math.abs(row - TARGET_ROW) + Math.abs(col - TARGET_COL);
+
+        // If we can't physically reach the target in the remaining moves, return 0
+        if (minMovesToTarget > remainingMoves) {
+            memo[pos][row][col] = 0L;
+            return 0;
+        }
+
+        // If parity doesn't match, we can't reach the target
+        // For each move, parity of (row+col) changes, so if remaining moves and distance
+        // don't have the same parity, we can't reach the target
+        if ((minMovesToTarget % 2) != (remainingMoves % 2)) {
+            memo[pos][row][col] = 0L;
+            return 0;
+        }
+
+        // Current direction to check
+        char direction = description.charAt(pos);
+        long paths = 0;
+
+        // Try all possible moves based on the current character
+        if (direction == 'D' || direction == '?') {
+            paths += solve(description, pos + 1, row + 1, col, memo);
+        }
+
+        if (direction == 'U' || direction == '?') {
+            paths += solve(description, pos + 1, row - 1, col, memo);
+        }
+
+        if (direction == 'L' || direction == '?') {
+            paths += solve(description, pos + 1, row, col - 1, memo);
+        }
+
+        if (direction == 'R' || direction == '?') {
+            paths += solve(description, pos + 1, row, col + 1, memo);
+        }
+
+        // Store the result in the memo array
+        memo[pos][row][col] = paths;
+        return paths;
     }
 }
-
 
 
 
