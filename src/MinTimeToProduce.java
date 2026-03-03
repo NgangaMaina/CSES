@@ -1,41 +1,52 @@
-import java.util.*;
+import java.io.*;
+
 public class MinTimeToProduce {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        long n = sc.nextLong();
-        long t = sc.nextLong();
-        long[] k = new long[(int) n];
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(
+                new InputStreamReader(System.in)
+        );
+
+        String[] first = br.readLine().split(" ");
+        int n = Integer.parseInt(first[0]);
+        long t = Long.parseLong(first[1]);
+
+        long[] k = new long[n];
         long maxK = 0;
+
+        String[] times = br.readLine().split(" ");
         for (int i = 0; i < n; i++) {
-            k[i] = sc.nextLong();
+            k[i] = Long.parseLong(times[i]);
             if (k[i] > maxK) maxK = k[i];
         }
-        sc.close();
 
-        //Binary search bounds
-        long low = 0;
-        long high = t * maxK; //Max possible time
+        // Sort ascending → early termination much more likely
+        java.util.Arrays.sort(k);
+
+        long low = 0;   // or 1 — 0 is fine, check handles it
+        long high = t * maxK + 1;   // +1 to be safe
 
         while (low < high) {
-            long mid = low +  (high - low)/2;
-            if(canProduce(mid, k, t)) {
+            long mid = low + (high - low) / 2;
+            if (canProduce(mid, k, t)) {
                 high = mid;
-            } else{
+            } else {
                 low = mid + 1;
             }
         }
+
         System.out.println(low);
     }
 
     private static boolean canProduce(long time, long[] k, long target) {
         long total = 0;
-        for(long ki : k) {
-            long contrib = time/ki;
-            if(contrib >= target - total) {
-                return true; //Will exceed or meet target.
+        for (long ki : k) {
+            total += time / ki;
+
+            //early exit as soon as possible
+            if (total >= target) {
+                return true;
             }
-            total += contrib;
         }
-        return false;
+        return total >= target;
     }
 }
